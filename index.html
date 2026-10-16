@@ -1,111 +1,452 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Extraction Note</title><link rel="stylesheet" href="style.css"></head><body>
-<header><h1>Extraction</h1><div><button id="loadExample" type="button">Load document example</button><span id="autosaveMessage" role="status"></span></div></header>
-<form id="extractionForm"><div class="odontogram-grid"><div class="dentition-canvas"><div class="dentition-controls" aria-label="Dentition"><button type="button" class="dentition-button active" data-dentition="permanent">Full permanent</button><button type="button" class="dentition-button" data-dentition="primary">Full primary</button><button type="button" class="dentition-button" data-dentition="mixed">Mixed</button></div><p>Choose teeth for extraction</p><div class="arch" id="maxillary"></div><div class="quadrant-horizontal-line"></div><div class="arch" id="mandibular"></div><p id="selectedTeeth" aria-live="polite">No teeth selected</p></div>    <section class="clinical-panel vitals-panel cohri-panel" aria-labelledby="cohriHeading">
-      <h2 id="cohriHeading">COHRI</h2>
-      <div class="cohri-row">
-        <span class="cohri-label">Vitals</span>
-        <div class="vitals-fields">
-        <label class="vital-field" for="vitalBP">BP
-          <input id="vitalBP" class="vitals-input" data-vital="bp" type="text" inputmode="text" aria-describedby="bpUnit">
-          <span id="bpUnit">mmHg</span>
-        </label>
-        <label class="vital-field" for="vitalPulse">Pulse
-          <input id="vitalPulse" class="vitals-input" data-vital="pulse" type="text" inputmode="numeric" aria-describedby="pulseUnit">
-          <span id="pulseUnit">bpm</span>
-        </label>
-        <label class="vital-field" for="vitalTemperature">Temperature
-          <input id="vitalTemperature" class="vitals-input" data-vital="temperature" type="text" inputmode="decimal" aria-describedby="temperatureUnit">
-          <span id="temperatureUnit">°F</span>
-        </label>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Extraction Note</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <form id="extractionForm">
+      <div class="odontogram-grid">
+        <div class="dentition-canvas">
+          <div class="dentition-controls" aria-label="Dentition">
+            <button type="button" class="dentition-button active" data-dentition="permanent">Full permanent</button>
+            <button type="button" class="dentition-button" data-dentition="primary">Full primary</button>
+            <button type="button" class="dentition-button" data-dentition="mixed">Mixed</button>
+          </div>
+          <div class="quadrant-selectors" role="group" aria-label="Select quadrants">
+            <label class="cohri-option">
+              <input type="checkbox" class="provided-input quadrant-checkbox" data-quadrant="UR" aria-label="Select all upper right teeth"> UR</label>
+            <label class="cohri-option">
+              <input type="checkbox" class="provided-input quadrant-checkbox" data-quadrant="UL" aria-label="Select all upper left teeth"> UL</label>
+          </div>
+          <div class="arch" id="maxillary">
+          </div>
+          <div class="quadrant-horizontal-line">
+          </div>
+          <div class="quadrant-selectors" role="group" aria-label="Select quadrants">
+            <label class="cohri-option">
+              <input type="checkbox" class="provided-input quadrant-checkbox" data-quadrant="LR" aria-label="Select all lower right teeth"> LR</label>
+            <label class="cohri-option">
+              <input type="checkbox" class="provided-input quadrant-checkbox" data-quadrant="LL" aria-label="Select all lower left teeth"> LL</label>
+          </div>
+          <div class="arch" id="mandibular">
+          </div>
+          <div class="main-odontogram-controls">
+            <button type="button" id="missingMain" class="finding whole-finding btn-missing" aria-label="Toggle missing for selected teeth">(M) Missing</button>
+            <button type="button" id="changeAge" class="main-control-button">Change Age</button>
+          </div>
+          <p class="selection-summary" id="selectedTeeth" aria-live="polite">No teeth selected</p>
         </div>
+        <section class="clinical-panel vitals-panel cohri-panel" aria-labelledby="cohriHeading">
+          <h2 id="cohriHeading">COHRI</h2>
+          <div class="cohri-row">
+            <span class="cohri-label">Vitals</span>
+            <div class="vitals-fields">
+              <label class="vital-field" for="vitalBP">BP
+                <input id="vitalBP" class="vitals-input" data-vital="bp" type="text" inputmode="text" aria-describedby="bpUnit">
+                <span id="bpUnit">mmHg</span>
+              </label>
+              <label class="vital-field" for="vitalPulse">Pulse
+                <input id="vitalPulse" class="vitals-input" data-vital="pulse" type="text" inputmode="numeric" aria-describedby="pulseUnit">
+                <span id="pulseUnit">bpm</span>
+              </label>
+              <label class="vital-field" for="vitalTemperature">Temperature
+                <input id="vitalTemperature" class="vitals-input" data-vital="temperature" type="text" inputmode="decimal" aria-describedby="temperatureUnit">
+                <span id="temperatureUnit">°F</span>
+              </label>
+            </div>
+          </div>
+          <div class="cohri-row" role="group" aria-labelledby="historyLabel">
+            <span class="cohri-label" id="historyLabel">Update medical and dental history</span>
+            <label class="cohri-option">
+              <input class="cohri-choice" type="radio" name="cohri-history" value="no-change" aria-keyshortcuts="N" title="Press N to select this option in the focused line"> No change</label>
+            <label class="cohri-option">
+              <input class="cohri-choice" type="radio" name="cohri-history" value="change" aria-controls="historyDetails" aria-keyshortcuts="Y" title="Press Y to select this option in the focused line"> Change</label>
+            <input id="historyDetails" class="cohri-details" type="text" aria-label="Update medical and dental history details" hidden>
+          </div>
+          <div class="cohri-row" role="group" aria-labelledby="medicationLabel">
+            <span class="cohri-label" id="medicationLabel">Update medication</span>
+            <label class="cohri-option">
+              <input class="cohri-choice" type="radio" name="cohri-medication" value="no-change" aria-keyshortcuts="N" title="Press N to select this option in the focused line"> No change</label>
+            <label class="cohri-option">
+              <input class="cohri-choice" type="radio" name="cohri-medication" value="change" aria-controls="medicationDetails" aria-keyshortcuts="Y" title="Press Y to select this option in the focused line"> Change</label>
+            <input id="medicationDetails" class="cohri-details" type="text" aria-label="Update medication details" hidden>
+          </div>
+          <div class="cohri-row" role="group" aria-labelledby="premedicationLabel">
+            <span class="cohri-label" id="premedicationLabel">Premedication</span>
+            <label class="cohri-option">
+              <input class="cohri-choice" type="radio" name="cohri-premedication" value="none" aria-keyshortcuts="N" title="Press N to select this option in the focused line"> None</label>
+            <label class="cohri-option">
+              <input class="cohri-choice" type="radio" name="cohri-premedication" value="yes" aria-controls="premedicationDetails" aria-keyshortcuts="Y" title="Press Y to select this option in the focused line"> Yes</label>
+            <input id="premedicationDetails" class="cohri-details" type="text" aria-label="Premedication details" hidden>
+          </div>
+        </section>
+        <section class="clinical-panel odontogram-findings">
+          <h2>Diagnosis</h2>
+          <input id="diagnosis" type="hidden" value="">
+          <div class="finding-section">
+            <div class="finding-row diagnosis-buttons" role="group" aria-label="Diagnosis">
+              <button type="button" class="finding diagnosis-button" data-diagnosis="Non-restorable" aria-pressed="false">Non-restorable</button>
+              <button type="button" class="finding diagnosis-button" data-diagnosis="Necrosis" aria-pressed="false">Necrosis</button>
+              <button type="button" class="finding diagnosis-button" data-diagnosis="Root tip" aria-pressed="false">Root tip</button>
+              <button type="button" class="finding diagnosis-button" data-diagnosis="Impacted tooth" aria-pressed="false">Impacted tooth</button>
+              <button type="button" class="finding diagnosis-button" data-diagnosis="Wisdom tooth" aria-pressed="false">Wisdom tooth</button>
+              <button type="button" class="finding diagnosis-button" data-diagnosis="Other" aria-pressed="false">Other</button>
+              <input id="diagnosisOther" class="provided-input" type="text" value="" aria-label="Other diagnosis" placeholder="Enter diagnosis" hidden>
+              <button type="button" id="addOtherDiagnosis" class="dentition-button" hidden>Add finding</button>
+            </div>
+          </div>
+          <div class="diagnosis-findings-line">
+            <div id="diagnosisTags" class="diagnosis-tags" aria-label="Diagnoses by tooth" aria-live="polite">
+            </div>
+            <label class="cohri-option">
+              <input type="checkbox" id="selectAllFindings" class="provided-input"> Select all</label>
+          </div>
+          <span id="diagnosisStatus" role="status">
+          </span>
+        </section>
+        <section class="clinical-panel planned-treatment">
+          <h2>Planned Treatment</h2>
+          <div class="treatment-section">
+            <div class="finding-row" role="group" aria-label="Planned treatment">
+              <button type="button" class="treatment planned-extraction-button" data-planned-treatment="Simple extraction">Simple extraction</button>
+              <button type="button" class="treatment planned-extraction-button" data-planned-treatment="Surgical extraction">Surgical extraction</button>
+              <button type="button" class="treatment planned-extraction-button" data-planned-treatment="Alveoloplasty 1-3 teeth">Alveoloplasty 1-3 teeth</button>
+              <button type="button" class="treatment planned-extraction-button" data-planned-treatment="Alveoloplasty +4 teeth">Alveoloplasty +4 teeth</button>
+            </div>
+          </div>
+          <div id="plannedTreatmentTags" class="diagnosis-tags" aria-label="Planned treatments by tooth" aria-live="polite">
+          </div>
+          <span id="plannedTreatmentStatus" role="status">
+          </span>
+        </section>
       </div>
-      <div class="cohri-row" role="group" aria-labelledby="historyLabel">
-        <span class="cohri-label" id="historyLabel">Update medical and dental history</span>
-        <label class="cohri-option"><input class="cohri-choice" type="radio" name="cohri-history" value="no-change" aria-keyshortcuts="N" title="Press N to select this option in the focused line"> No change</label>
-        <label class="cohri-option"><input class="cohri-choice" type="radio" name="cohri-history" value="change" aria-controls="historyDetails" aria-keyshortcuts="Y" title="Press Y to select this option in the focused line"> Change</label>
-        <input id="historyDetails" class="cohri-details" type="text" aria-label="Update medical and dental history details" hidden>
-      </div>
-      <div class="cohri-row" role="group" aria-labelledby="medicationLabel">
-        <span class="cohri-label" id="medicationLabel">Update medication</span>
-        <label class="cohri-option"><input class="cohri-choice" type="radio" name="cohri-medication" value="no-change" aria-keyshortcuts="N" title="Press N to select this option in the focused line"> No change</label>
-        <label class="cohri-option"><input class="cohri-choice" type="radio" name="cohri-medication" value="change" aria-controls="medicationDetails" aria-keyshortcuts="Y" title="Press Y to select this option in the focused line"> Change</label>
-        <input id="medicationDetails" class="cohri-details" type="text" aria-label="Update medication details" hidden>
-      </div>
-      <div class="cohri-row" role="group" aria-labelledby="premedicationLabel">
-        <span class="cohri-label" id="premedicationLabel">Premedication</span>
-        <label class="cohri-option"><input class="cohri-choice" type="radio" name="cohri-premedication" value="none" aria-keyshortcuts="N" title="Press N to select this option in the focused line"> None</label>
-        <label class="cohri-option"><input class="cohri-choice" type="radio" name="cohri-premedication" value="yes" aria-controls="premedicationDetails" aria-keyshortcuts="Y" title="Press Y to select this option in the focused line"> Yes</label>
-        <input id="premedicationDetails" class="cohri-details" type="text" aria-label="Premedication details" hidden>
-      </div>
-    </section>
-<section class="clinical-panel"><h2>Diagnosis and planned treatment</h2><div class="cohri-row"><label>Diagnosis <select id="diagnosis"><option>Choose diagnosis</option><option>Non-restorable</option><option>Retained root tip</option><option>Other</option></select></label><label>Other diagnosis <input id="diagnosisOther" value="" type="text"></label></div><p>Planned treatment: Extraction of selected teeth</p></section></div>
-<section class="clinical-panel treatment-provided"><h2>Treatment provided</h2><div class="cohri-row"><label class="cohri-option"><input id="consent" type="checkbox"> Verbal and informed consent provided</label><label class="cohri-option"><input id="performed" type="checkbox"> Extraction completed for selected teeth</label></div>    <div class="cohri-row provided-main-row" role="group" aria-labelledby="localAnesthesiaLabel">
-      <span id="localAnesthesiaLabel" class="cohri-label">Local anesthesia</span>
-      <label class="cohri-option"><input id="topicalBenzocaine" class="provided-input" type="checkbox"> Topical benzocaine</label>
-      <label class="cohri-option"><input id="nerveBlock" class="provided-input" type="checkbox" aria-controls="nerveBlockDetails"> Nerve block</label>
-      <label class="cohri-option"><input id="localInfiltration" class="provided-input" type="checkbox" aria-controls="infiltrationDetails"> Local infiltration</label>
-    </div>
-    <div id="nerveBlockDetails" class="provided-conditional anesthesia-details" hidden>
-      <h3>Nerve block</h3>
-        <div class="anesthesia-fields">
-          <label for="nerveCarpules"># of carpules <input id="nerveCarpules" class="provided-input provided-number" type="number" min="0" step="any"></label>
-          <label for="nerveLA">Name of LA <select id="nerveLA" class="provided-input">
-            <option value="lidocaine" selected>2% Lidocaine with 1:100K epi</option>
-            <option value="articaine">4% of Articaine with 1:100K epi</option>
-            <option value="mepivacaine">3% of Mepivacaine (plain)</option>
-            <option value="bupivacaine">0.5% of Bupivacaine with 1:200K epi</option>
-          </select></label>
+      <section class="clinical-panel treatment-provided">
+        <h2>Treatment provided</h2>
+        <div class="cohri-row">
+          <label class="cohri-option">
+            <input id="consent" type="checkbox" class="provided-input"> Verbal and informed consent provided</label>
         </div>
-      <div class="anesthesia-locations">
-        <span class="field-caption">Locations</span>
-        <div class="nerve-side">
-          <label class="cohri-option"><input id="nerveRight" class="provided-input" type="checkbox" aria-controls="nerveRightBlocks"> Right</label>
-          <div id="nerveRightBlocks" class="provided-conditional block-options" hidden>
-            <label class="cohri-option"><input id="nerveRight0" class="provided-input" type="checkbox"> PSA</label>
-            <label class="cohri-option"><input id="nerveRight1" class="provided-input" type="checkbox"> MSA</label>
-            <label class="cohri-option"><input id="nerveRight2" class="provided-input" type="checkbox"> ASA</label>
-            <label class="cohri-option"><input id="nerveRight3" class="provided-input" type="checkbox"> Palatal</label>
-            <label class="cohri-option"><input id="nerveRight4" class="provided-input" type="checkbox"> IAN</label>
-            <label class="cohri-option"><input id="nerveRight5" class="provided-input" type="checkbox"> Buccal block</label>
-            <label class="cohri-option"><input id="nerveRight6" class="provided-input" type="checkbox"> Mental block</label>
+        <div class="cohri-row provided-main-row" role="group" aria-labelledby="providedPlanLabel">
+          <span id="providedPlanLabel" class="cohri-label">Treatment</span>
+          <label class="cohri-option">
+            <input id="providedSame" class="provided-input" type="radio" name="cohri-provided" value="same-as-planned"> Same as planned</label>
+          <label class="cohri-option">
+            <input id="providedChange" class="provided-input" type="radio" name="cohri-provided" value="change" aria-controls="providedChanges"> Change</label>
+        </div>
+        <div id="providedChanges" class="provided-conditional" hidden>
+          <div id="providedTreatmentTags" class="diagnosis-tags provided-tags" aria-label="Treatment provided" aria-live="polite">
+          </div>
+          <p class="provided-edit-help">Select teeth or a finding tag, then use the treatment buttons above to change the treatment provided.</p>
+        </div>
+        <div class="cohri-row provided-main-row" role="group" aria-labelledby="inhaledNOLabel">
+          <span id="inhaledNOLabel" class="cohri-label">Inhaled NO</span>
+          <label class="cohri-option">
+            <input id="inhaledNONone" class="provided-input" type="radio" name="inhaledNO" value="none" aria-keyshortcuts="N" title="Press N to select this option in the focused line"> None</label>
+          <label class="cohri-option">
+            <input id="inhaledNOYes" class="provided-input" type="radio" name="inhaledNO" value="yes" aria-keyshortcuts="Y" title="Press Y to select this option in the focused line"> Yes</label>
+        </div>
+        <div class="cohri-row provided-main-row" role="group" aria-labelledby="localAnesthesiaLabel">
+          <span id="localAnesthesiaLabel" class="cohri-label">Local anesthesia</span>
+          <label class="cohri-option">
+            <input id="topicalBenzocaine" class="provided-input" type="checkbox"> Topical benzocaine</label>
+          <label class="cohri-option">
+            <input id="nerveBlock" class="provided-input" type="checkbox" aria-controls="nerveBlockDetails"> Nerve block</label>
+          <label class="cohri-option">
+            <input id="localInfiltration" class="provided-input" type="checkbox" aria-controls="infiltrationDetails"> Local infiltration</label>
+        </div>
+        <div id="nerveBlockDetails" class="provided-conditional anesthesia-details" hidden>
+          <h3>Nerve block</h3>
+          <div class="anesthesia-fields">
+            <label for="nerveCarpules"># of carpules <input id="nerveCarpules" class="provided-input provided-number" type="number" min="0" step="any">
+            </label>
+            <label for="nerveLA">Name of LA <select id="nerveLA" class="provided-input">
+                <option value="lidocaine" selected>2% Lidocaine with 1:100K epi</option>
+                <option value="articaine">4% of Articaine with 1:100K epi</option>
+                <option value="mepivacaine">3% of Mepivacaine (plain)</option>
+                <option value="bupivacaine">0.5% of Bupivacaine with 1:200K epi</option>
+              </select>
+            </label>
+          </div>
+          <div class="anesthesia-locations">
+            <span class="field-caption">Locations</span>
+            <div class="nerve-side">
+              <label class="cohri-option">
+                <input id="nerveRight" class="provided-input" type="checkbox" aria-controls="nerveRightBlocks"> Right</label>
+              <div id="nerveRightBlocks" class="provided-conditional block-options" hidden>
+                <label class="cohri-option">
+                  <input id="nerveRight0" class="provided-input" type="checkbox"> PSA</label>
+                <label class="cohri-option">
+                  <input id="nerveRight1" class="provided-input" type="checkbox"> MSA</label>
+                <label class="cohri-option">
+                  <input id="nerveRight2" class="provided-input" type="checkbox"> ASA</label>
+                <label class="cohri-option">
+                  <input id="nerveRight3" class="provided-input" type="checkbox"> Palatal</label>
+                <label class="cohri-option">
+                  <input id="nerveRight4" class="provided-input" type="checkbox"> IAN</label>
+                <label class="cohri-option">
+                  <input id="nerveRight5" class="provided-input" type="checkbox"> Buccal block</label>
+                <label class="cohri-option">
+                  <input id="nerveRight6" class="provided-input" type="checkbox"> Mental block</label>
+              </div>
+            </div>
+            <div class="nerve-side">
+              <label class="cohri-option">
+                <input id="nerveLeft" class="provided-input" type="checkbox" aria-controls="nerveLeftBlocks"> Left</label>
+              <div id="nerveLeftBlocks" class="provided-conditional block-options" hidden>
+                <label class="cohri-option">
+                  <input id="nerveLeft0" class="provided-input" type="checkbox"> PSA</label>
+                <label class="cohri-option">
+                  <input id="nerveLeft1" class="provided-input" type="checkbox"> MSA</label>
+                <label class="cohri-option">
+                  <input id="nerveLeft2" class="provided-input" type="checkbox"> ASA</label>
+                <label class="cohri-option">
+                  <input id="nerveLeft3" class="provided-input" type="checkbox"> Palatal</label>
+                <label class="cohri-option">
+                  <input id="nerveLeft4" class="provided-input" type="checkbox"> IAN</label>
+                <label class="cohri-option">
+                  <input id="nerveLeft5" class="provided-input" type="checkbox"> Buccal block</label>
+                <label class="cohri-option">
+                  <input id="nerveLeft6" class="provided-input" type="checkbox"> Mental block</label>
+              </div>
+            </div>
           </div>
         </div>
-        <div class="nerve-side">
-          <label class="cohri-option"><input id="nerveLeft" class="provided-input" type="checkbox" aria-controls="nerveLeftBlocks"> Left</label>
-          <div id="nerveLeftBlocks" class="provided-conditional block-options" hidden>
-            <label class="cohri-option"><input id="nerveLeft0" class="provided-input" type="checkbox"> PSA</label>
-            <label class="cohri-option"><input id="nerveLeft1" class="provided-input" type="checkbox"> MSA</label>
-            <label class="cohri-option"><input id="nerveLeft2" class="provided-input" type="checkbox"> ASA</label>
-            <label class="cohri-option"><input id="nerveLeft3" class="provided-input" type="checkbox"> Palatal</label>
-            <label class="cohri-option"><input id="nerveLeft4" class="provided-input" type="checkbox"> IAN</label>
-            <label class="cohri-option"><input id="nerveLeft5" class="provided-input" type="checkbox"> Buccal block</label>
-            <label class="cohri-option"><input id="nerveLeft6" class="provided-input" type="checkbox"> Mental block</label>
+        <div id="infiltrationDetails" class="provided-conditional anesthesia-details" hidden>
+          <h3>Local infiltration</h3>
+          <div class="anesthesia-fields">
+            <label for="infiltrationCarpules"># of carpules <input id="infiltrationCarpules" class="provided-input provided-number" type="number" min="0" step="any">
+            </label>
+            <label for="infiltrationLA">Name of LA <select id="infiltrationLA" class="provided-input">
+                <option value="lidocaine">2% Lidocaine with 1:100K epi</option>
+                <option value="articaine" selected>4% of Articaine with 1:100K epi</option>
+                <option value="mepivacaine">3% of Mepivacaine (plain)</option>
+                <option value="bupivacaine">0.5% of Bupivacaine with 1:200K epi</option>
+              </select>
+            </label>
           </div>
         </div>
-      </div>
-    </div>
-    <div id="infiltrationDetails" class="provided-conditional anesthesia-details" hidden>
-      <h3>Local infiltration</h3>
-        <div class="anesthesia-fields">
-          <label for="infiltrationCarpules"># of carpules <input id="infiltrationCarpules" class="provided-input provided-number" type="number" min="0" step="any"></label>
-          <label for="infiltrationLA">Name of LA <select id="infiltrationLA" class="provided-input">
-            <option value="lidocaine">2% Lidocaine with 1:100K epi</option>
-            <option value="articaine" selected>4% of Articaine with 1:100K epi</option>
-            <option value="mepivacaine">3% of Mepivacaine (plain)</option>
-            <option value="bupivacaine">0.5% of Bupivacaine with 1:200K epi</option>
-          </select></label>
+        <section class="provided-section">
+          <h3>Extraction technique</h3>
+          <div class="cohri-row" role="group" aria-labelledby="flapTechniqueLabel">
+            <strong id="flapTechniqueLabel" class="cohri-label">Flap technique</strong>
+            <label class="cohri-option">
+              <input id="flap" type="checkbox" class="provided-input" aria-controls="bladeDetails"> Blade</label>
+            <label id="bladeDetails" hidden>
+              <select id="blade" class="provided-input" aria-label="Blade type">
+                <option value="15" selected>15 blade</option>
+                <option value="12">12 blade</option>
+              </select>
+            </label>
+            <label class="cohri-option">
+              <input id="flapReflected" type="checkbox" class="provided-input"> Reflected by Molt 2 and 9</label>
+            <input id="reflector" type="hidden" value="Molt 2 and 9">
+          </div>
+          <div class="cohri-row" role="group" aria-labelledby="forcepsLabel">
+            <strong id="forcepsLabel" class="cohri-label">Forceps used</strong>
+            <label class="cohri-option">
+              <input id="forcepsChoice0" class="provided-input" type="checkbox" name="forceps-choice" value="#150"> #150</label>
+            <label class="cohri-option">
+              <input id="forcepsChoice1" class="provided-input" type="checkbox" name="forceps-choice" value="#151"> #151</label>
+            <label class="cohri-option">
+              <input id="forcepsChoice2" class="provided-input" type="checkbox" name="forceps-choice" value="#23 Cowhorn"> #23 Cowhorn</label>
+            <label class="cohri-option">
+              <input id="forcepsChoice3" class="provided-input" type="checkbox" name="forceps-choice" value="Others" aria-controls="forcepsOtherDetails"> Others</label>
+            <div id="forcepsOtherDetails" hidden>
+              <details class="forceps-dropdown">
+                <summary>Choose other forceps</summary>
+                <div class="forceps-dropdown-options">
+                  <label class="cohri-option">
+                    <input id="forcepsExtra0" class="provided-input" type="checkbox" value="#150S"> #150S</label>
+                  <label class="cohri-option">
+                    <input id="forcepsExtra1" class="provided-input" type="checkbox" value="#151S"> #151S</label>
+                  <label class="cohri-option">
+                    <input id="forcepsExtra2" class="provided-input" type="checkbox" value="#3 MEAD"> #3 MEAD</label>
+                  <label class="cohri-option">
+                    <input id="forcepsExtra3" class="provided-input" type="checkbox" value="#1107"> #1107</label>
+                  <label class="cohri-option">
+                    <input id="forcepsExtra4" class="provided-input" type="checkbox" value="#18R"> #18R</label>
+                  <label class="cohri-option">
+                    <input id="forcepsExtra5" class="provided-input" type="checkbox" value="#18L"> #18L</label>
+                </div>
+              </details>
+            </div>
+            <input id="forcepsOther" type="hidden" value="">
+            <input id="forceps" type="hidden" value="">
+          </div>
+          <div class="cohri-row" role="group" aria-labelledby="surgicalBurLabel">
+            <strong id="surgicalBurLabel" class="cohri-label">Surgical bur used</strong>
+            <label class="cohri-option">
+              <input id="surgicalBurNo" class="provided-input" type="radio" name="surgical-bur" value="no"> No</label>
+            <label class="cohri-option">
+              <input id="surgicalBurYes" class="provided-input" type="radio" name="surgical-bur" value="yes"> Yes</label>
+            <label id="burDetails" hidden>
+              <select id="bur" class="provided-input" aria-label="Surgical bur">
+                <option value="701">701 bur</option>
+                <option value="702">702 bur</option>
+              </select>
+            </label>
+          </div>
+          <div class="cohri-row" role="group" aria-labelledby="cryerLabel">
+            <strong id="cryerLabel" class="cohri-label">Cryer elevators used</strong>
+            <label class="cohri-option">
+              <input id="cryerNo" class="provided-input" type="radio" name="cryer-elevators" value="no"> No</label>
+            <label class="cohri-option">
+              <input id="cryerYes" class="provided-input" type="radio" name="cryer-elevators" value="yes"> Yes</label>
+          </div>
+          <div class="cohri-row" role="group" aria-labelledby="sutureUsedLabel">
+            <strong id="sutureUsedLabel" class="cohri-label">Suture used</strong>
+            <label class="cohri-option">
+              <input id="sutureUsedNo" class="provided-input" type="radio" name="suture-used" value="no"> No</label>
+            <label class="cohri-option">
+              <input id="sutureUsedYes" class="provided-input" type="radio" name="suture-used" value="yes"> Yes</label>
+            <label id="sutureTypeDetails" hidden>
+              <select id="sutureType" class="provided-input" aria-label="Suture type">
+                <option>3-0 Chromic gut</option>
+                <option>4-0 Chromic gut</option>
+                <option>4-0 PTFE</option>
+              </select>
+            </label>
+          </div>
+          <input id="suture" type="hidden" value="">
+        </section>
+        <label class="wide-field">Additional treatment details<textarea id="additional" rows="2" class="provided-input">
+          </textarea>
+        </label>
+      </section>
+      <section class="clinical-panel treatment-provided">
+        <h2>Postoperative care</h2>
+        <div class="cohri-row">
+          <label class="cohri-option">
+            <input id="postop" type="checkbox" class="provided-input"> Postoperative instructions provided</label>
+          <label class="cohri-option">
+            <input id="painReliefProvided" type="checkbox" class="provided-input"> Pain relief regime provided</label>
         </div>
+        <label class="wide-field">Post-operative care<textarea id="pain" rows="4" class="provided-input" readonly aria-label="Post-operative care generated from selections">
+          </textarea>
+        </label>
+        <div class="cohri-row">
+          <label class="cohri-option">
+            <input id="rxEnabled" type="checkbox" class="provided-input" aria-controls="rxOptions"> Post-operative prescription</label>
+        </div>
+        <div id="rxOptions" class="provided-conditional" role="group" aria-label="Post-operative prescriptions" hidden>
+          <div class="cohri-row">
+            <label class="cohri-option">
+              <input id="rxAmoxicillin" type="checkbox" class="provided-input"> Amoxicillin 500 mg TID in 7 days.</label>
+          </div>
+          <div class="cohri-row">
+            <label class="cohri-option">
+              <input id="rxCHX" type="checkbox" class="provided-input"> 0.12% CHX 15 mg mouth rise BID in 7 days.</label>
+          </div>
+          <div class="cohri-row">
+            <label class="cohri-option">
+              <input id="rxOthers" type="checkbox" class="provided-input" aria-controls="rxOtherText"> Others</label>
+            <input id="rxOtherText" type="text" class="provided-input" aria-label="Other prescription" placeholder="Enter prescription" hidden>
+          </div>
+        </div>
+        <input id="rx" type="hidden" value="">
+      </section>
+      <section class="clinical-panel treatment-provided note-panel" aria-labelledby="noteHeading">
+        <h2 id="noteHeading">Note</h2>
+        <div class="cohri-row note-fields-row fit-note-fields">
+          <label for="noteNV">NV: <input value="POC in 2 weeks" id="noteNV" class="provided-input" type="text" aria-label="Next visit">
+          </label>
+          <label for="noteAssistantEnabled">Assistant <input id="noteAssistantEnabled" class="provided-input" type="checkbox" aria-controls="noteAssistant">
+            <input id="noteAssistant" class="provided-input" type="text" aria-label="Assistant name" placeholder="Assistant name" hidden>
+          </label>
+          <label for="notePreceptor">Preceptor: <select id="notePreceptor" class="provided-input">
+              <option value="">Choose a preceptor</option>
+              <option value="Dr. Doyle">Dr. Doyle</option>
+              <option value="Dr. Hoch">Dr. Hoch</option>
+              <option value="Dr. Kohler">Dr. Kohler</option>
+              <option value="Dr. Palo">Dr. Palo</option>
+              <option value="Dr. McAllister">Dr. McAllister</option>
+              <option value="Dr. Roberts">Dr. Roberts</option>
+              <option value="Dr. Calderbank">Dr. Calderbank</option>
+              <option value="Dr. Goldsmith">Dr. Goldsmith</option>
+              <option value="Dr. Pollock">Dr. Pollock</option>
+              <option value="Dr. Poe">Dr. Poe</option>
+              <option value="Others">Others</option>
+            </select>
+            <input id="notePreceptorOther" class="provided-input" type="text" aria-label="Other preceptor name" placeholder="Preceptor name" hidden>
+          </label>
+          <div class="different-preceptors" role="group" aria-label="Different preceptors">
+            <span>If different preceptor</span>
+            <div class="different-preceptor-option">
+              <label class="cohri-option">
+                <input id="noteCodesDifferent" class="provided-input" type="checkbox" aria-controls="noteCodesFields">for completing codes</label>
+              <span id="noteCodesFields" class="different-preceptor-fields" hidden>
+                <select id="noteCodesPreceptor" class="provided-input" aria-label="Preceptor for completing codes">
+                  <option value="">Choose a preceptor</option>
+                  <option value="Dr. Doyle">Dr. Doyle</option>
+                  <option value="Dr. Hoch">Dr. Hoch</option>
+                  <option value="Dr. Kohler">Dr. Kohler</option>
+                  <option value="Dr. Palo">Dr. Palo</option>
+                  <option value="Dr. McAllister">Dr. McAllister</option>
+                  <option value="Dr. Roberts">Dr. Roberts</option>
+                  <option value="Dr. Calderbank">Dr. Calderbank</option>
+                  <option value="Dr. Goldsmith">Dr. Goldsmith</option>
+                  <option value="Dr. Pollock">Dr. Pollock</option>
+                  <option value="Dr. Poe">Dr. Poe</option>
+                  <option value="Others">Others</option>
+                </select>
+                <input id="noteCodesOther" class="provided-input" type="text" aria-label="Other preceptor for completing codes" placeholder="Preceptor name" hidden>
+              </span>
+            </div>
+            <div class="different-preceptor-option">
+              <label class="cohri-option">
+                <input id="noteSwipeDifferent" class="provided-input" type="checkbox" aria-controls="noteSwipeFields">for swiping note</label>
+              <span id="noteSwipeFields" class="different-preceptor-fields" hidden>
+                <select id="noteSwipePreceptor" class="provided-input" aria-label="Preceptor for swiping note">
+                  <option value="">Choose a preceptor</option>
+                  <option value="Dr. Doyle">Dr. Doyle</option>
+                  <option value="Dr. Hoch">Dr. Hoch</option>
+                  <option value="Dr. Kohler">Dr. Kohler</option>
+                  <option value="Dr. Palo">Dr. Palo</option>
+                  <option value="Dr. McAllister">Dr. McAllister</option>
+                  <option value="Dr. Roberts">Dr. Roberts</option>
+                  <option value="Dr. Calderbank">Dr. Calderbank</option>
+                  <option value="Dr. Goldsmith">Dr. Goldsmith</option>
+                  <option value="Dr. Pollock">Dr. Pollock</option>
+                  <option value="Dr. Poe">Dr. Poe</option>
+                  <option value="Others">Others</option>
+                </select>
+                <input id="noteSwipeOther" class="provided-input" type="text" aria-label="Other preceptor for swiping note" placeholder="Preceptor name" hidden>
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="cohri-row">
+          <label>Student Dr <input id="student" value="Long Ton" type="text" class="provided-input">
+          </label>
+          <label>Clinic <input id="clinic" value="POD2 - 242" type="text" class="provided-input">
+          </label>
+        </div>
+        <div id="generatedNote" role="textbox" aria-label="Editable clinical note" aria-multiline="true" contenteditable="true" spellcheck="true" tabindex="0">
+        </div>
+        <div class="copy-note-controls">
+          <button id="copyNote" type="button">Copy Note</button>
+          <span id="noteCopyStatus" role="status">
+          </span>
+        </div>
+      </section>
+    </form>
+    <div class="draft-tools">
+      <span id="autosaveMessage" role="status">
+      </span>
     </div>
-<h3>Extraction technique</h3><div class="cohri-row"><label class="cohri-option"><input id="flap" type="checkbox"> Flap raised</label><label>Blade <input id="blade" value="" type="text"></label><label>Flap reflection instrument <input id="reflector" value="" type="text"></label></div><div class="cohri-row"><label class="cohri-option"><input id="luxation" type="checkbox"> Tooth luxated</label><label>Elevators <input id="elevators" value="" type="text"></label><label>Forceps <input id="forceps" value="" type="text"></label></div><div class="cohri-row"><label class="cohri-option"><input id="sectioned" type="checkbox"> Tooth sectioned and removed in parts</label><label>Surgical bur <input id="bur" value="" type="text"></label></div><div class="cohri-row"><label class="cohri-option"><input id="rootsChecked" type="checkbox"> Tooth and socket checked for remaining root tips</label><label class="cohri-option"><input id="compressed" type="checkbox"> Socket compressed with gauze and finger pressure</label><label class="cohri-option"><input id="hemostasis" type="checkbox"> Hemostasis achieved</label></div><div class="cohri-row"><label>Sutures <select id="suture"><option>Not documented</option><option>None</option><option>Resorbable</option><option>Non-resorbable</option></select></label><label>Suture details <input id="sutureDetails" value="" type="text"></label><label>Suture instructions <input id="sutureFollowup" value="" type="text"></label></div><label class="wide-field">Additional treatment details<textarea id="additional" rows="2"></textarea></label></section>
-<section class="clinical-panel"><h2>Postoperative care</h2><div class="cohri-row"><label class="cohri-option"><input id="postop" type="checkbox"> Postoperative instructions provided</label></div><label class="wide-field">Pain management instructions<textarea id="pain" rows="2"></textarea></label><label class="wide-field">Postoperative prescriptions<textarea id="rx" rows="3" placeholder="Enter prescribed medication, dose, route, frequency, and duration"></textarea></label></section>  <section class="clinical-panel treatment-provided note-panel" aria-labelledby="noteHeading">
-    <h2 id="noteHeading">Note</h2>
-    <div class="cohri-row note-fields-row">
-      <label for="noteNV">NV: <input value="Post-op check in 2 weeks" id="noteNV" class="provided-input" type="text" aria-label="Next visit"></label>
-      <label for="noteAssistantEnabled">Assistant <input id="noteAssistantEnabled" class="provided-input" type="checkbox" aria-controls="noteAssistant"><input id="noteAssistant" class="provided-input" type="text" aria-label="Assistant name" placeholder="Assistant name" hidden></label>
-      <label for="notePreceptor">Preceptor: <select id="notePreceptor" class="provided-input"><option value="">Choose a preceptor</option><option value="Dr. Doyle">Dr. Doyle</option><option value="Dr. Hoch">Dr. Hoch</option><option value="Dr. Kohler">Dr. Kohler</option><option value="Dr. Palo">Dr. Palo</option><option value="Dr. McAllister">Dr. McAllister</option><option value="Dr. Roberts">Dr. Roberts</option><option value="Dr. Calderbank">Dr. Calderbank</option><option value="Dr. Goldsmith">Dr. Goldsmith</option><option value="Dr. Pollock">Dr. Pollock</option><option value="Dr. Poe">Dr. Poe</option><option value="Others">Others</option></select><input id="notePreceptorOther" class="provided-input" type="text" aria-label="Other preceptor name" placeholder="Preceptor name" hidden></label>
-      <div class="different-preceptors" role="group" aria-label="Different preceptors"><span>If different preceptor</span><div class="different-preceptor-option"><label class="cohri-option"><input id="noteCodesDifferent" class="provided-input" type="checkbox" aria-controls="noteCodesFields">for completing codes</label><span id="noteCodesFields" class="different-preceptor-fields" hidden><select id="noteCodesPreceptor" class="provided-input" aria-label="Preceptor for completing codes"><option value="">Choose a preceptor</option><option value="Dr. Doyle">Dr. Doyle</option><option value="Dr. Hoch">Dr. Hoch</option><option value="Dr. Kohler">Dr. Kohler</option><option value="Dr. Palo">Dr. Palo</option><option value="Dr. McAllister">Dr. McAllister</option><option value="Dr. Roberts">Dr. Roberts</option><option value="Dr. Calderbank">Dr. Calderbank</option><option value="Dr. Goldsmith">Dr. Goldsmith</option><option value="Dr. Pollock">Dr. Pollock</option><option value="Dr. Poe">Dr. Poe</option><option value="Others">Others</option></select><input id="noteCodesOther" class="provided-input" type="text" aria-label="Other preceptor for completing codes" placeholder="Preceptor name" hidden></span></div><div class="different-preceptor-option"><label class="cohri-option"><input id="noteSwipeDifferent" class="provided-input" type="checkbox" aria-controls="noteSwipeFields">for swiping note</label><span id="noteSwipeFields" class="different-preceptor-fields" hidden><select id="noteSwipePreceptor" class="provided-input" aria-label="Preceptor for swiping note"><option value="">Choose a preceptor</option><option value="Dr. Doyle">Dr. Doyle</option><option value="Dr. Hoch">Dr. Hoch</option><option value="Dr. Kohler">Dr. Kohler</option><option value="Dr. Palo">Dr. Palo</option><option value="Dr. McAllister">Dr. McAllister</option><option value="Dr. Roberts">Dr. Roberts</option><option value="Dr. Calderbank">Dr. Calderbank</option><option value="Dr. Goldsmith">Dr. Goldsmith</option><option value="Dr. Pollock">Dr. Pollock</option><option value="Dr. Poe">Dr. Poe</option><option value="Others">Others</option></select><input id="noteSwipeOther" class="provided-input" type="text" aria-label="Other preceptor for swiping note" placeholder="Preceptor name" hidden></span></div></div>
+    <div class="clear-all-area">
+      <button id="clearAll" type="button">Clear All</button>
     </div>
-    <div id="generatedNote" role="textbox" aria-label="Editable clinical note" aria-multiline="true" contenteditable="true" spellcheck="true" tabindex="0"></div>
-    <div class="copy-note-controls"><button id="copyNote" type="button">Copy Note</button><span id="noteCopyStatus" role="status"></span></div>
-  </section>
-<div class="cohri-row"><label>Student Dr <input id="student" value="Long Ton" type="text"></label><label>Clinic <input id="clinic" value="POD2 - 242" type="text"></label></div></form><div class="clear-all-area"><button id="clearAll" type="button">Clear All</button></div><dialog id="clearDialog"><h3>Clear all extraction data?</h3><p>This removes the saved draft on this browser.</p><button id="cancelClear" type="button">Keep data</button><button id="confirmClear" type="button">Clear all</button></dialog><script src="script.js"></script></body></html>
+    <dialog id="clearDialog">
+      <h3>Clear all extraction data?</h3>
+      <p>This removes the saved draft on this browser.</p>
+      <button id="cancelClear" type="button">Keep data</button>
+      <button id="confirmClear" type="button">Clear all</button>
+    </dialog>
+    <script src="script.js">
+    </script>
+  </body>
+</html>
