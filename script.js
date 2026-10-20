@@ -57,6 +57,7 @@ const fields=()=>[...document.querySelectorAll('#extractionForm input,#extractio
 function readFields(){return Object.fromEntries(fields().filter(e=>e.id).map(e=>[e.id,e.type==='checkbox'||e.type==='radio'?e.checked:e.value]));}
 function radio(name){return document.querySelector('input[name="'+name+'"]:checked')?.value||'';}
 function conditional(){
+ document.getElementById('painReliefPrint').hidden = !document.getElementById('painReliefProvided').checked;
  updatePrescriptionFields();
  updateSurgicalOptions();
  $('pain').value=generatePostoperativeCare();

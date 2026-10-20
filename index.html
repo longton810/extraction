@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Extraction Note</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=postoperative-spacing-1">
   </head>
   <body>
     <form id="extractionForm">
@@ -318,11 +318,12 @@
       </section>
       <section class="clinical-panel treatment-provided">
         <h2>Postoperative care</h2>
-        <div class="cohri-row">
+        <div class="cohri-row postoperative-care-options">
           <label class="cohri-option">
-            <input id="postop" type="checkbox" class="provided-input"> Postoperative instructions provided</label>
+            <input id="postop" type="checkbox" class="provided-input"> Post-extraction instruction provided</label>
           <label class="cohri-option">
             <input id="painReliefProvided" type="checkbox" class="provided-input"> Pain relief regime provided</label>
+          <button id="painReliefPrint" type="button" hidden aria-label="Print pain relief regime" onclick="window.open('pain-relief-print.html', '_blank', 'noopener')">Print</button>
         </div>
         <label class="wide-field">Post-operative care<textarea id="pain" rows="4" class="provided-input" readonly aria-label="Post-operative care generated from selections">
           </textarea>
@@ -358,17 +359,7 @@
           </label>
           <label for="notePreceptor">Preceptor: <select id="notePreceptor" class="provided-input">
               <option value="">Choose a preceptor</option>
-              <option value="Dr. Doyle">Dr. Doyle</option>
-              <option value="Dr. Hoch">Dr. Hoch</option>
-              <option value="Dr. Kohler">Dr. Kohler</option>
-              <option value="Dr. Palo">Dr. Palo</option>
-              <option value="Dr. McAllister">Dr. McAllister</option>
-              <option value="Dr. Roberts">Dr. Roberts</option>
-              <option value="Dr. Calderbank">Dr. Calderbank</option>
-              <option value="Dr. Goldsmith">Dr. Goldsmith</option>
-              <option value="Dr. Pollock">Dr. Pollock</option>
-              <option value="Dr. Poe">Dr. Poe</option>
-              <option value="Others">Others</option>
+              <option value="Dr. Benson">Dr. Benson</option><option value="Dr. Calderbank">Dr. Calderbank</option><option value="Dr. Doyle">Dr. Doyle</option><option value="Dr. Goldsmith">Dr. Goldsmith</option><option value="Dr. Gradisek">Dr. Gradisek</option><option value="Dr. Hoch">Dr. Hoch</option><option value="Dr. Kohler">Dr. Kohler</option><option value="Dr. McAllister">Dr. McAllister</option><option value="Dr. Palo">Dr. Palo</option><option value="Dr. Poe">Dr. Poe</option><option value="Dr. Pollock">Dr. Pollock</option><option value="Dr. Roberts">Dr. Roberts</option><option value="Others">Others</option>
             </select>
             <input id="notePreceptorOther" class="provided-input" type="text" aria-label="Other preceptor name" placeholder="Preceptor name" hidden>
           </label>
@@ -380,17 +371,7 @@
               <span id="noteCodesFields" class="different-preceptor-fields" hidden>
                 <select id="noteCodesPreceptor" class="provided-input" aria-label="Preceptor for completing codes">
                   <option value="">Choose a preceptor</option>
-                  <option value="Dr. Doyle">Dr. Doyle</option>
-                  <option value="Dr. Hoch">Dr. Hoch</option>
-                  <option value="Dr. Kohler">Dr. Kohler</option>
-                  <option value="Dr. Palo">Dr. Palo</option>
-                  <option value="Dr. McAllister">Dr. McAllister</option>
-                  <option value="Dr. Roberts">Dr. Roberts</option>
-                  <option value="Dr. Calderbank">Dr. Calderbank</option>
-                  <option value="Dr. Goldsmith">Dr. Goldsmith</option>
-                  <option value="Dr. Pollock">Dr. Pollock</option>
-                  <option value="Dr. Poe">Dr. Poe</option>
-                  <option value="Others">Others</option>
+                  <option value="Dr. Benson">Dr. Benson</option><option value="Dr. Calderbank">Dr. Calderbank</option><option value="Dr. Doyle">Dr. Doyle</option><option value="Dr. Goldsmith">Dr. Goldsmith</option><option value="Dr. Gradisek">Dr. Gradisek</option><option value="Dr. Hoch">Dr. Hoch</option><option value="Dr. Kohler">Dr. Kohler</option><option value="Dr. McAllister">Dr. McAllister</option><option value="Dr. Palo">Dr. Palo</option><option value="Dr. Poe">Dr. Poe</option><option value="Dr. Pollock">Dr. Pollock</option><option value="Dr. Roberts">Dr. Roberts</option><option value="Others">Others</option>
                 </select>
                 <input id="noteCodesOther" class="provided-input" type="text" aria-label="Other preceptor for completing codes" placeholder="Preceptor name" hidden>
               </span>
@@ -401,17 +382,7 @@
               <span id="noteSwipeFields" class="different-preceptor-fields" hidden>
                 <select id="noteSwipePreceptor" class="provided-input" aria-label="Preceptor for swiping note">
                   <option value="">Choose a preceptor</option>
-                  <option value="Dr. Doyle">Dr. Doyle</option>
-                  <option value="Dr. Hoch">Dr. Hoch</option>
-                  <option value="Dr. Kohler">Dr. Kohler</option>
-                  <option value="Dr. Palo">Dr. Palo</option>
-                  <option value="Dr. McAllister">Dr. McAllister</option>
-                  <option value="Dr. Roberts">Dr. Roberts</option>
-                  <option value="Dr. Calderbank">Dr. Calderbank</option>
-                  <option value="Dr. Goldsmith">Dr. Goldsmith</option>
-                  <option value="Dr. Pollock">Dr. Pollock</option>
-                  <option value="Dr. Poe">Dr. Poe</option>
-                  <option value="Others">Others</option>
+                  <option value="Dr. Benson">Dr. Benson</option><option value="Dr. Calderbank">Dr. Calderbank</option><option value="Dr. Doyle">Dr. Doyle</option><option value="Dr. Goldsmith">Dr. Goldsmith</option><option value="Dr. Gradisek">Dr. Gradisek</option><option value="Dr. Hoch">Dr. Hoch</option><option value="Dr. Kohler">Dr. Kohler</option><option value="Dr. McAllister">Dr. McAllister</option><option value="Dr. Palo">Dr. Palo</option><option value="Dr. Poe">Dr. Poe</option><option value="Dr. Pollock">Dr. Pollock</option><option value="Dr. Roberts">Dr. Roberts</option><option value="Others">Others</option>
                 </select>
                 <input id="noteSwipeOther" class="provided-input" type="text" aria-label="Other preceptor for swiping note" placeholder="Preceptor name" hidden>
               </span>
